@@ -1,0 +1,252 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Bookstore API
+  description: A sample API for a bookstore to manage books and authors
+  termsOfService: https://example.com/terms
+  contact:
+    name: API Support
+    email: support@example.com
+    url: https://example.com/support
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://api.example.com/v1
+paths:
+  /books:
+    get:
+      summary: List all books
+      description: Returns a list of all available books in the store
+      operationId: listBooks
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      summary: Create a new book
+      description: Creates a new book in the store
+      operationId: createBook
+      requestBody:
+        description: Book object to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+        required: true
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+  /books/{bookId}:
+    get:
+      summary: Get a book
+      description: Returns a single book
+      operationId: getBook
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of the book to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    put:
+      summary: Update a book
+      description: Updates an existing book
+      operationId: updateBook
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of the book to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Book object to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    delete:
+      summary: Delete a book
+      description: Deletes an existing book
+      operationId: deleteBook
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of the book to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Successful response
+  /authors:
+    get:
+      summary: List all authors
+      description: Returns a list of all authors
+      operationId: listAuthors
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+    post:
+      summary: Create a new author
+      description: Creates a new author
+      operationId: createAuthor
+      requestBody:
+        description: Author object to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorInput'
+        required: true
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+  /authors/{authorId}:
+    get:
+      summary: Get an author
+      description: Returns a single author
+      operationId: getAuthor
+      parameters:
+        - name: authorId
+          in: path
+          description: ID of the author to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+    put:
+      summary: Update an author
+      description: Updates an existing author
+      operationId: updateAuthor
+      parameters:
+        - name: authorId
+          in: path
+          description: ID of the author to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Author object to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+    delete:
+      summary: Delete an author
+      description: Deletes an existing author
+      operationId: deleteAuthor
+      parameters:
+        - name: authorId
+          in: path
+          description: ID of the author to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Successful response
+components:
+  schemas:
+    Book:
+      type: object
+      required:
+        - id
+        - title
+        - author
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          $ref: '#/components/schemas/Author'
+        description:
+          type: string
+        published:
+          type: string
+          format: date
+    BookInput:
+      type: object
+      required:
+        - title
+        - authorId
+      properties:
+        title:
+          type: string
+        authorId:
+          type: integer
+        description:
+          type: string
+        published:
+          type: string
+          format: date
+    Author:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        biography:
+          type: string
+    AuthorInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        biography:
+          type: string

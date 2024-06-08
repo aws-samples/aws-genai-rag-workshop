@@ -1,0 +1,98 @@
+
+    Documentation for bookstore
+    
+    Description:
+    The Bookstore API is a set of APIs that allow users to manage books and authors in a bookstore. The API provides endpoints for listing all available books and authors, retrieving details of a specific book or author, creating new books and authors, updating existing books and authors, and deleting books and authors.
+
+The '/books' endpoint supports GET and POST methods. The GET method returns a list of all available books in the store, with each book having properties like id, title, author (an Author object), description, and published date. The POST method creates a new book in the store, and the request body should contain a BookInput object with properties like title, authorId, description, and published date.
+
+The '/books/{bookId}' endpoint supports GET, PUT, and DELETE methods. The GET method retrieves a single book by its id. The PUT method updates an existing book by its id, and the request body should contain a BookInput object with the updated properties. The DELETE method deletes an existing book by its id.
+
+The '/authors' endpoint supports GET and POST methods, similar to '/books'. The GET method returns a list of all authors, with each author having properties like id, name, and biography. The POST method creates a new author, and the request body should contain an AuthorInput object with properties like name and biography.
+
+The '/authors/{authorId}' endpoint supports GET, PUT, and DELETE methods, similar to '/books/{bookId}', but for managing authors instead of books.
+
+Possible errors and limits:
+- Not providing required properties in the request body for POST and PUT methods.
+- Attempting to retrieve, update, or delete a non-existing book or author.
+- Exceeding rate limits or triggering abuse prevention mechanisms.
+    ['- Number of routes/endpoints: 6', '- Number of request data models: 2 (BookInput and AuthorInput)', '- Number of response data models: 2 (Book and Author)', '- Number of HTTP methods used: 4 (GET, POST, PUT, DELETE)']
+    
+    FAQ:
+    
+    What is the purpose of the Bookstore API?
+
+The Bookstore API allows you to manage books and authors in a bookstore. It provides endpoints for listing, creating, retrieving, updating, and deleting books and authors.
+
+How do I retrieve a list of all available books?
+
+To retrieve a list of all available books, send a GET request to the '/books' endpoint. The response will contain an array of Book objects.
+
+What properties does a Book object have?
+
+A Book object has the following properties: id, title, author (an Author object), description, and published (a date string).
+
+How do I create a new book?
+
+To create a new book, send a POST request to the '/books' endpoint with a request body containing a BookInput object. The BookInput object should have properties like title, authorId, description, and published.
+
+What is the purpose of the 'authorId' property in the BookInput object?
+
+The 'authorId' property in the BookInput object is used to associate the new book with an existing author. It should contain the id of the author.
+
+How do I retrieve details of a specific book?
+
+To retrieve details of a specific book, send a GET request to the '/books/{bookId}' endpoint, replacing '{bookId}' with the id of the book you want to retrieve.
+
+How do I update an existing book?
+
+To update an existing book, send a PUT request to the '/books/{bookId}' endpoint with a request body containing a BookInput object with the updated properties. Replace '{bookId}' with the id of the book you want to update.
+
+How do I delete a book?
+
+To delete a book, send a DELETE request to the '/books/{bookId}' endpoint, replacing '{bookId}' with the id of the book you want to delete.
+
+How do I retrieve a list of all authors?
+
+To retrieve a list of all authors, send a GET request to the '/authors' endpoint. The response will contain an array of Author objects.
+
+What properties does an Author object have?
+
+An Author object has the following properties: id, name, and biography.
+
+How do I create a new author?
+
+To create a new author, send a POST request to the '/authors' endpoint with a request body containing an AuthorInput object with properties like name and biography.
+
+How do I retrieve details of a specific author?
+
+To retrieve details of a specific author, send a GET request to the '/authors/{authorId}' endpoint, replacing '{authorId}' with the id of the author you want to retrieve.
+
+How do I update an existing author?
+
+To update an existing author, send a PUT request to the '/authors/{authorId}' endpoint with a request body containing an AuthorInput object with the updated properties. Replace '{authorId}' with the id of the author you want to update.
+
+How do I delete an author?
+
+To delete an author, send a DELETE request to the '/authors/{authorId}' endpoint, replacing '{authorId}' with the id of the author you want to delete.
+
+What HTTP status code should I expect for a successful response?
+
+For successful responses, you should expect a 200 OK status code for GET, PUT, and DELETE requests, and a 201 Created status code for POST requests that create new resources.
+
+What HTTP status code should I expect if I try to retrieve a non-existing book or author?
+
+If you try to retrieve a non-existing book or author, you should expect a 404 Not Found status code in the response.
+
+What happens if I don't provide a required property in the request body for POST or PUT requests?
+
+If you don't provide a required property in the request body for POST or PUT requests, the API will likely return a 400 Bad Request status code, indicating that the request is invalid.
+
+Are there any rate limits or abuse prevention mechanisms in place for the Bookstore API?
+
+The YAML file doesn't explicitly mention any rate limits or abuse prevention mechanisms, but it's possible that such mechanisms are in place to protect the API from excessive or malicious usage.
+
+Can I use the Bookstore API for commercial purposes?
+
+The YAML file doesn't provide any information about commercial usage or licensing terms. You should refer to the terms of service (https://example.com/terms) or contact the API support team (support@example.com) for more information.
+

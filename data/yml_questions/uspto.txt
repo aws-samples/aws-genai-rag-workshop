@@ -1,0 +1,134 @@
+
+    Documentation for uspto
+    
+    Description:
+    The USPTO Data Set API (DSAPI) is a RESTful API that allows public users to discover and search USPTO exported data sets. It consists of two main functionalities: metadata retrieval and data search.
+
+Metadata Retrieval:
+- The GET '/' endpoint returns a list of available data sets, including their API keys, version numbers, URLs, and documentation URLs. This allows users to discover the available data sets and their details.
+- The GET '/{dataset}/{version}/fields' endpoint provides information about a specific data set, including the list of searchable fields. It takes two path parameters: 'dataset' and 'version', representing the name and version of the data set, respectively. The response includes the field names that can be used for searching the data set.
+
+Data Search:
+- The POST '/{dataset}/{version}/records' endpoint allows users to search and retrieve data from a specific data set based on provided search criteria. It takes the same path parameters as the metadata endpoint, along with a request body containing the search criteria.
+- The request body has the following properties:
+  - 'criteria': A search query string following the Lucene Query Syntax, e.g., 'field_name:value', 'field_name:[start_value TO end_value]', or '*:*' for all records.
+  - 'start': The starting record number (default is 0).
+  - 'rows': The number of rows (records) to return (default is 100).
+- The response contains an array of matching records, where each record is an object with additional properties representing the data fields and their corresponding values.
+
+Limits and Errors:
+- The GET requests have size limitations, which is why the search functionality is implemented as a POST request to allow complex search criteria without encoding issues.
+- A 404 error is returned if the specified dataset and version combination is not found or is not published for public consumption.
+    ['- Number of routes/endpoints: 3', '- Number of request data models: 1 (for the POST /search endpoint)', '- Number of response data models: 2 (dataSetList and the array of records)', '- Number of tags/categories: 2 (metadata and search)', '- Number of path parameters: 2 (dataset and version)']
+    
+    FAQ:
+    
+    What is the USPTO Data Set API (DSAPI)?
+
+The USPTO Data Set API (DSAPI) is a RESTful API that allows public users to discover and search USPTO exported data sets. It provides endpoints for retrieving metadata about available data sets and for searching and retrieving data from specific data sets based on provided search criteria.
+
+How can I get a list of available data sets?
+
+To get a list of available data sets, you can send a GET request to the '/' endpoint. The response will contain an array of data sets, including their API keys, version numbers, URLs, and documentation URLs.
+
+How can I get information about a specific data set, such as the list of searchable fields?
+
+To get information about a specific data set, including the list of searchable fields, you can send a GET request to the '/{dataset}/{version}/fields' endpoint, replacing '{dataset}' and '{version}' with the name and version of the data set, respectively.
+
+Can you provide an example response for the GET '/{dataset}/{version}/fields' endpoint?
+
+Sure, here's an example response from the YAML file:
+
+```json
+{
+  "fields": [
+    "field1",
+    "field2",
+    "field3",
+    ...
+  ]
+}
+```
+
+This response includes an array of field names that can be used for searching the specified data set.
+
+How can I search and retrieve data from a specific data set?
+
+To search and retrieve data from a specific data set, you can send a POST request to the '/{dataset}/{version}/records' endpoint, replacing '{dataset}' and '{version}' with the name and version of the data set, respectively. The request body should include the search criteria, start record number, and the number of rows to return.
+
+What is the structure of the request body for the POST '/{dataset}/{version}/records' endpoint?
+
+The request body for the POST '/{dataset}/{version}/records' endpoint should be in the 'application/x-www-form-urlencoded' format and should include the following properties:
+
+- 'criteria': A search query string following the Lucene Query Syntax.
+- 'start': The starting record number (default is 0).
+- 'rows': The number of rows (records) to return (default is 100).
+
+Can you provide an example of the Lucene Query Syntax for the 'criteria' property?
+
+Sure, here are some examples of the Lucene Query Syntax for the 'criteria' property:
+
+- 'field_name:value' (e.g., 'title:patent')
+- 'field_name:[start_value TO end_value]' (e.g., 'year:[2000 TO 2010]')
+- '*:*' (to return all records)
+
+What is the structure of the response from the POST '/{dataset}/{version}/records' endpoint?
+
+The response from the POST '/{dataset}/{version}/records' endpoint is an array of matching records, where each record is an object with additional properties representing the data fields and their corresponding values. For example:
+
+```json
+[
+  {
+    "field1": "value1",
+    "field2": "value2",
+    ...
+  },
+  {
+    "field1": "value3",
+    "field2": "value4",
+    ...
+  },
+  ...
+]
+```
+
+What happens if the specified dataset and version combination is not found or not published for public consumption?
+
+If the specified dataset and version combination is not found or not published for public consumption, the API will return a 404 error response.
+
+Why is the search functionality implemented as a POST request instead of a GET request?
+
+The search functionality is implemented as a POST request because GET requests have size limitations, which can make it difficult to send complex search criteria without encoding issues. By using a POST request, users can send any complex search criteria without worrying about the GET size limitations or encoding of the input parameters.
+
+Are there any limits on the number of records that can be returned from the search endpoint?
+
+Yes, the 'rows' parameter in the request body allows you to specify the number of rows (records) to be returned. The default value is 100, but you can adjust this value according to your needs.
+
+How can I determine the total number of records available in a data set?
+
+To determine the total number of records available in a data set, you can run the search with the default values (e.g., 'criteria=*:*', 'start=0', 'rows=100'). The response will include a 'numFound' attribute that tells the total number of records available in the data set.
+
+Can I search multiple fields simultaneously using the Lucene Query Syntax?
+
+Yes, you can search multiple fields simultaneously using the Lucene Query Syntax. For example, 'field1:value1 AND field2:value2' will search for records where both 'field1' and 'field2' match the specified values.
+
+How can I handle date ranges in the search criteria?
+
+To handle date ranges in the search criteria, you can use the following format in the Lucene Query Syntax: 'date_field:[yyyyMMdd TO yyyyMMdd]'. For example, 'publication_date:[20200101 TO 20201231]' will search for records with publication dates between January 1, 2020, and December 31, 2020.
+
+Can I combine multiple search criteria using logical operators like AND, OR, and NOT?
+
+Yes, you can combine multiple search criteria using logical operators like AND, OR, and NOT in the Lucene Query Syntax. For example, 'field1:value1 AND (field2:value2 OR field3:value3) NOT field4:value4' will search for records that match the specified conditions.
+
+How can I handle special characters or spaces in the search values?
+
+To handle special characters or spaces in the search values, you need to properly encode or escape them according to the Lucene Query Syntax rules. For example, you may need to use backslash (\) to escape special characters or enclose values with double quotes (").
+
+Is it possible to sort the search results based on a specific field?
+
+The YAML file does not provide information about sorting capabilities, but typically, APIs that use the Lucene Query Syntax allow sorting of search results by appending a 'sort' parameter to the query string. For example, 'sort=field1 asc' or 'sort=field2 desc'.
+
+Can I access the API documentation or interactive API console for a specific data set?
+
+Yes, the response from the GET '/' endpoint includes an 'apiDocumentationUrl' property for each data set, which provides a URL to the API console or documentation for that specific API.
+

@@ -1,0 +1,98 @@
+
+    Documentation for uspto
+    
+    Description:
+    This set of APIs provides functionality for managing and searching data sets. The APIs include:
+
+1. GET /dataSetList: Retrieves a list of available data sets.
+
+2. GET /dataset/{version}/fields: Retrieves a list of searchable fields for a specified dataset and version. The request takes 'dataset' and 'version' as parameters, and the response contains either a 200 status code with a list of searchable fields or a 404 error if the dataset/version is not found.
+
+3. POST /dataset/{version}/records: Performs a search within a specified dataset and version. The request takes 'dataset' and 'version' as parameters, and a 'perform-search Request' body containing search criteria, start index, and number of rows. The response contains either a 200 status code with the search results or a 404 error if the dataset/version is not found.
+
+Important notes:
+- The 'perform-search Request' body must be properly formatted with the required fields.
+- Certain datasets or versions may have limits on the searchable fields or the number of records that can be returned.
+    - Number of routes/endpoints: 3
+- Number of request data models: 1 (perform-search Request)
+- Number of response data models: 3 (list-searchable-fields 200, list-searchable-fields 404, perform-search 200)
+- Number of data structures: 2 (dataSetList, dataSetList.apis)
+    
+    FAQ:
+    
+    What is the purpose of this API set?
+
+This set of APIs allows users to retrieve a list of available data sets, get the searchable fields for a specific data set and version, and perform searches within a data set to retrieve records.
+
+How do I get a list of available data sets?
+
+You can use the GET /dataSetList endpoint to retrieve a list of available data sets. The response will include a 'total' field indicating the number of data sets, and an 'apis' field containing details about each data set.
+
+What information is provided for each data set in the list?
+
+For each data set, the 'apis' field in the response provides the following information: apiKey, apiVersionNumber, apiUri, and apiDocumentationUri.
+
+How do I get the searchable fields for a specific data set and version?
+
+You can use the GET /dataset/{version}/fields endpoint, passing the 'dataset' and 'version' as path parameters. The response will contain a list of searchable fields for the specified data set and version, or a 404 error if the dataset/version is not found.
+
+What is required to perform a search within a data set?
+
+To perform a search, you need to use the POST /dataset/{version}/records endpoint and provide the 'dataset' and 'version' as path parameters. Additionally, you need to include a 'perform-search Request' body containing the search criteria, start index, and number of rows.
+
+What fields are required in the 'perform-search Request' body?
+
+The 'perform-search Request' body must include the following fields: 'criteria' (a string containing the search criteria), 'start' (an integer indicating the start index for the search results), and 'rows' (an integer specifying the number of rows to return).
+
+What kind of response can I expect from a successful search?
+
+If the search is successful, the response will have a 200 status code and a 'value' field containing a map of search results. If the dataset/version is not found, the response will have a 404 status code.
+
+Are there any limits or restrictions on the searches?
+
+Yes, certain data sets or versions may have limits on the searchable fields or the number of records that can be returned. These limits are not explicitly specified in the provided documentation, but it's important to be aware of potential restrictions.
+
+How do I handle errors or unsuccessful responses?
+
+If an error occurs, the API will return a non-200 status code, such as 404 if the requested dataset/version is not found. You should handle these error responses appropriately in your application logic.
+
+Can I get documentation or additional information about a specific data set?
+
+Yes, the 'apis' field in the response from the GET /dataSetList endpoint includes an 'apiDocumentationUri' field for each data set, which presumably provides a link to documentation or additional information.
+
+How do I know which fields are searchable for a particular data set and version?
+
+You can use the GET /dataset/{version}/fields endpoint to retrieve a list of searchable fields for a specific data set and version. The response will contain an array of field names that are searchable.
+
+Can I search across multiple data sets with a single request?
+
+No, the APIs provided do not appear to support searching across multiple data sets with a single request. Each search must be performed against a specific data set and version.
+
+How do I specify the search criteria in the 'perform-search Request' body?
+
+The search criteria should be provided as a string in the 'criteria' field of the 'perform-search Request' body. The format or syntax of the search criteria is not specified in the provided documentation.
+
+What happens if I try to access a data set or version that doesn't exist?
+
+If you attempt to access a data set or version that doesn't exist, the API will respond with a 404 status code, indicating that the requested resource was not found.
+
+Can I sort or filter the search results?
+
+The provided documentation does not mention any specific functionality for sorting or filtering search results. It appears that the search results are returned as-is based on the provided search criteria.
+
+Are there any authentication or authorization requirements for using these APIs?
+
+The provided documentation does not mention any authentication or authorization requirements. It's possible that additional security measures may be in place, but they are not specified in the given information.
+
+How can I test or experiment with these APIs?
+
+Without access to the actual APIs or a development environment, the best way to test or experiment would be to create a mock implementation based on the provided documentation. This would allow you to simulate requests and responses and validate your understanding of the APIs.
+
+Are there any rate limits or throttling mechanisms in place for these APIs?
+
+The provided documentation does not mention any rate limits or throttling mechanisms. However, it's common for APIs to have some form of rate limiting or throttling to prevent abuse or overload, so it's possible that such measures are in place but not documented.
+
+Can I cache the responses from these APIs?
+
+The documentation does not provide any specific guidance on caching responses. Caching may be possible, but you should consider factors such as data freshness requirements and cache invalidation mechanisms before implementing any caching strategy.
+
