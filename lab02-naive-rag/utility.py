@@ -4,6 +4,7 @@ import random
 import time
 import zipfile
 from io import BytesIO
+import sys
 
 suffix = random.randrange(200, 900)
 boto3_session = boto3.session.Session()
@@ -435,3 +436,71 @@ def create_bedrock_execution_role_multi_ds(bucket_names):
     )
     return bedrock_kb_execution_role
 
+# Converse API invoke model
+def invoke_bedrock_model(client, id, prompt, max_tokens=2000, temperature=0, top_p=0.9):
+    response = ""
+    try:
+        response = client.converse(
+            modelId=id,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "text": prompt
+                        }
+                    ]
+                }
+            ],
+            inferenceConfig={
+                "temperature": temperature,
+                "maxTokens": max_tokens,
+                "topP": top_p
+            }
+            #additionalModelRequestFields={
+            #}
+        )
+    except Exception as e:
+        print(e)
+        result = "Model invocation error"
+    try:
+        result = response['output']['message']['content'][0]['text'] \
+        + '\n--- Latency: ' + str(response['metrics']['latencyMs']) \
+        + 'ms - Input tokens:' + str(response['usage']['inputTokens']) \
+        + ' - Output tokens:' + str(response['usage']['outputTokens']) + ' ---\n'
+        return result
+    except Exception as e:
+        print(e)
+        result = "Output parsing error"
+    return result
+
+
+# Converse API streaming
+def invoke_bedrock_model_stream(client, id, prompt, 
+                                max_tokens=2000, temperature=0, top_p=0.9):
+    response = ""
+    response = client.converse_stream(
+        modelId=id,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "text": prompt
+                    }
+                ]
+            }
+        ],
+        inferenceConfig={
+            "temperature": temperature,
+            "maxTokens": max_tokens,
+            "topP": top_p
+        }
+    )
+    # Extract and print the response text in real-time.
+    for event in response['stream']:
+        if 'contentBlockDelta' in event:
+            chunk = event['contentBlockDelta']
+            sys.stdout.write(chunk['delta']['text'])
+            sys.stdout.flush()
+    return
