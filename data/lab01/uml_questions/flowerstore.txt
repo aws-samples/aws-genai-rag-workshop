@@ -1,0 +1,85 @@
+
+    Documentation for uspto
+    
+    Description:
+    The provided images depict the structure and specifications for a set of APIs related to managing flowers. The main API endpoint is '/flowers', which supports GET, POST, and DELETE operations. The GET operation retrieves a list of flowers, taking two parameters: 'type' (a string array) to filter by flower types, and 'limit' (an integer) to control the maximum number of results. The response is a '200' status code with an array of 'Flower' objects, each containing an 'id' (integer) property. The POST operation creates a new flower, accepting a 'NewFlower' object in the request body with properties like 'name' (string), 'type' (string), and 'price' (decimal). On success, it returns a '200' status code with the created 'Flower' object. The DELETE operation removes a flower by its 'id', returning a '204' status code on success. Additionally, there's a '/flowers/{id}' endpoint for GET and DELETE operations on individual flowers. Potential errors include a generic 'Error' object with 'code' (integer) and 'message' (string) properties.
+    ['- Number of routes/endpoints: 5', "- Number of request data models: 2 ('findFlowers' and 'NewFlower')", "- Number of response data models: 4 ('Flower', 'Error', 'Response', and 'deleteFlower 204')", "- Number of query parameters: 2 ('type' and 'limit' for GET '/flowers')", "- Number of path parameters: 1 ('id' for GET and DELETE '/flowers/{id}')"]
+    
+    FAQ:
+    
+    What is the purpose of these APIs?
+
+These APIs are designed for managing flowers, allowing users to retrieve lists of flowers, create new flowers, and delete existing flowers.
+
+How do I get a list of flowers?
+
+To get a list of flowers, send a GET request to the '/flowers' endpoint. You can optionally include the 'type' query parameter to filter by flower types (as a string array), and the 'limit' query parameter to control the maximum number of results.
+
+What does the response look like for the GET '/flowers' endpoint?
+
+The response for the GET '/flowers' endpoint is an array of 'Flower' objects, each containing an 'id' (integer) property. The response status code is '200' on success.
+
+How do I create a new flower?
+
+To create a new flower, send a POST request to the '/flowers' endpoint with a 'NewFlower' object in the request body. This object should contain the 'name' (string), 'type' (string), and 'price' (decimal) properties of the new flower.
+
+What is the response for a successful flower creation?
+
+If the flower creation is successful, the response will have a '200' status code and will contain the newly created 'Flower' object.
+
+How do I delete a flower?
+
+To delete a flower, send a DELETE request to either the '/flowers/{id}' endpoint (for a specific flower) or the '/flowers' endpoint (for all flowers). For the '/flowers/{id}' endpoint, you need to provide the 'id' of the flower you want to delete as a path parameter.
+
+What is the response for a successful flower deletion?
+
+If the flower deletion is successful, the response will have a '204' status code with no response body.
+
+What are the possible error responses?
+
+The APIs can return an 'Error' object as an error response, which contains a 'code' (integer) and 'message' (string) property. The specific error codes and messages are not provided in the given information.
+
+Can I update an existing flower?
+
+Based on the provided information, there is no endpoint or operation for updating an existing flower. The APIs only support creating, retrieving, and deleting flowers.
+
+Are there any limits on the number of flowers I can retrieve?
+
+Yes, when making a GET request to the '/flowers' endpoint, you can use the 'limit' query parameter to control the maximum number of flower results returned.
+
+What data types are used for the flower properties?
+
+The 'Flower' object has an 'id' property of type integer. The 'NewFlower' object used for creating a flower has 'name' (string), 'type' (string), and 'price' (decimal) properties.
+
+Can I filter the list of flowers by multiple types?
+
+Yes, when making a GET request to the '/flowers' endpoint, you can provide the 'type' query parameter as a string array to filter the results by multiple flower types.
+
+What is the purpose of the '/flowers/{id}' endpoint?
+
+The '/flowers/{id}' endpoint allows you to perform GET and DELETE operations on a specific flower identified by its 'id' value, which is provided as a path parameter.
+
+Can I retrieve a single flower by its ID?
+
+Yes, you can retrieve a single flower by sending a GET request to the '/flowers/{id}' endpoint, replacing '{id}' with the desired flower ID.
+
+Are there any authentication or authorization requirements for these APIs?
+
+The provided information does not mention any authentication or authorization requirements for these APIs.
+
+How can I handle errors when using these APIs?
+
+When an error occurs, the APIs can return an 'Error' object in the response, which contains a 'code' (integer) and 'message' (string) property. You should handle these error responses appropriately in your application logic.
+
+Can I sort or order the list of flowers returned by the GET '/flowers' endpoint?
+
+The provided information does not mention any option for sorting or ordering the list of flowers returned by the GET '/flowers' endpoint.
+
+Are there any rate limits or throttling mechanisms in place for these APIs?
+
+The provided information does not mention any rate limits or throttling mechanisms for these APIs.
+
+How can I test or explore these APIs?
+
+Since the provided information is visual documentation, you may need to set up a development environment or use tools like Postman or cURL to test and explore these APIs.
+
