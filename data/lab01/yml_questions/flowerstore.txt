@@ -2,84 +2,100 @@
     Documentation for flowerstore
     
     Description:
-    The Flowershop API provides a set of endpoints for managing the operations of a flower shop. The `/flowers` endpoint allows you to retrieve a list of all available flowers in the shop, with optional filtering by flower type and limiting the number of results. You can also add a new flower to the shop by sending a POST request to this endpoint with a `NewFlower` object in the request body. The `/flowers/{id}` endpoint enables you to retrieve details of a specific flower by its ID or delete a flower from the shop by sending a DELETE request with the flower's ID in the path parameter. The API responses are formatted in JSON and include relevant data models, such as `Flower`, `NewFlower`, and `Error`. Frequent errors may include invalid request parameters, missing required data, or requests for non-existent resources.
-    ['- Number of routes/endpoints: 3 (GET /flowers, POST /flowers, GET /flowers/{id}, DELETE /flowers/{id})', '- Number of request data models: 1 (NewFlower)', '- Number of response data models: 2 (Flower, Error)', '- Number of response status codes: 4 (200, 204, 200 with default error, 404 with default error)']
+    The Flowershop API is a set of endpoints for managing a flower shop's operations. The main functionalities include retrieving a list of available flowers, adding a new flower to the shop, fetching details of a specific flower by its ID, and deleting a flower by its ID.
+
+The /flowers endpoint supports GET and POST requests. The GET request retrieves a list of all flowers available in the shop. It accepts optional query parameters 'type' (an array of flower types to filter by) and 'limit' (maximum number of results to return). The response is an array of 'Flower' objects. The POST request adds a new flower to the shop. It requires a request body containing a 'NewFlower' object with properties 'name', 'type', and 'price'. The response is the newly created 'Flower' object.
+
+The /flowers/{id} endpoint supports GET and DELETE requests. The GET request fetches a specific flower by its ID, which is passed as a path parameter. The response is a 'Flower' object. The DELETE request deletes a flower by its ID, which is passed as a path parameter. A successful response has a 204 status code.
+
+The API uses two main data models: 'Flower' and 'NewFlower'. 'Flower' inherits properties from 'NewFlower' and adds an 'id' property. 'Error' is a common response model for unexpected errors, containing a 'code' and 'message' property.
+
+Potential limits and common errors include sending invalid or missing request data, querying for non-existent flower IDs, and server errors.
+    - Number of routes/endpoints: 3
+- Number of request data models: 1 (NewFlower)
+- Number of response data models: 2 (Flower, Error)
+- Number of query parameters: 2 (type, limit)
+- Number of path parameters: 1 (id)
     
     FAQ:
     
-    What is the purpose of the Flowershop API?
+    What is the Flowershop API?
 
-The Flowershop API provides a set of endpoints for managing the operations of a flower shop, such as retrieving lists of available flowers, adding new flowers, and deleting existing flowers.
+The Flowershop API is a set of endpoints for managing a flower shop's operations, such as retrieving available flowers, adding new flowers, and deleting existing flowers.
 
-How do I retrieve a list of all available flowers in the shop?
+How do I get a list of all available flowers?
 
-You can send a GET request to the `/flowers` endpoint to retrieve a list of all available flowers in the shop. The response will be a JSON array containing `Flower` objects.
+To get a list of all available flowers, send a GET request to the /flowers endpoint. The response will be an array of 'Flower' objects.
 
 Can I filter the list of flowers by type?
 
-Yes, you can filter the list of flowers by type by including the `type` query parameter in your GET request to the `/flowers` endpoint. The `type` parameter accepts an array of string values representing the flower types you want to filter by.
+Yes, when sending a GET request to /flowers, you can pass a 'type' query parameter as an array of flower types to filter the results.
 
-How do I limit the number of flowers returned in the response?
+How do I add a new flower to the shop?
 
-You can include the `limit` query parameter in your GET request to the `/flowers` endpoint to specify the maximum number of flower results to return. The `limit` parameter accepts an integer value.
+To add a new flower, send a POST request to the /flowers endpoint with a request body containing a 'NewFlower' object with properties 'name', 'type', and 'price'. The response will be the newly created 'Flower' object.
 
-What data is required to add a new flower to the shop?
+What properties does the 'NewFlower' object have?
 
-To add a new flower to the shop, you need to send a POST request to the `/flowers` endpoint with a `NewFlower` object in the request body. The `NewFlower` object must include the `name`, `type`, and `price` properties.
+The 'NewFlower' object has three required properties: 'name' (string), 'type' (string), and 'price' (number).
 
-How do I retrieve details of a specific flower by its ID?
+How do I get details of a specific flower?
 
-You can send a GET request to the `/flowers/{id}` endpoint, where `{id}` is the ID of the flower you want to retrieve. The response will be a `Flower` object containing the details of the requested flower.
-
-What is the format of the flower ID in the `/flowers/{id}` endpoint?
-
-The flower ID is an integer value in the int64 format.
+To get details of a specific flower, send a GET request to the /flowers/{id} endpoint, replacing {id} with the ID of the flower you want to fetch. The response will be a 'Flower' object.
 
 How do I delete a flower from the shop?
 
-To delete a flower from the shop, you need to send a DELETE request to the `/flowers/{id}` endpoint, where `{id}` is the ID of the flower you want to delete. If the request is successful, you will receive a 204 No Content response.
+To delete a flower, send a DELETE request to the /flowers/{id} endpoint, replacing {id} with the ID of the flower you want to delete. A successful response will have a 204 status code.
 
-What is the structure of the `Error` response model?
+What happens if I try to fetch or delete a non-existent flower ID?
 
-The `Error` response model is an object with two required properties: `code` (an integer value) and `message` (a string value). This model is used to represent unexpected errors encountered during API requests.
+If you try to fetch or delete a flower with an ID that doesn't exist in the shop, the API will respond with an 'Error' object containing an error code and message.
 
-What is the purpose of the `allOf` keyword in the `Flower` schema definition?
+What is the 'Error' response model used for?
 
-The `allOf` keyword is used to combine multiple schema definitions into a single schema. In the case of the `Flower` schema, it combines the `NewFlower` schema with an additional object containing the `id` property, which is required for existing flowers but not for new ones.
+The 'Error' response model is used to represent unexpected errors that may occur during the API requests. It contains a 'code' (integer) and 'message' (string) property to describe the error.
 
-How do I know if a request was successful or not?
+Can I limit the number of results returned in the flower list?
 
-Successful requests will typically return a 200 OK or 204 No Content status code, depending on the endpoint and operation. If an error occurs, the API will return an appropriate error status code (e.g., 400 Bad Request, 404 Not Found) and an `Error` object in the response body with details about the error.
+Yes, when sending a GET request to /flowers, you can pass a 'limit' query parameter with an integer value to limit the maximum number of results returned.
 
-What is the expected format of the `price` property in the `NewFlower` and `Flower` models?
+What HTTP methods are supported by the Flowershop API?
 
-The `price` property is a number in the float format, representing the price of the flower.
+The Flowershop API supports the GET, POST, and DELETE HTTP methods.
 
-Can I use this API to update an existing flower's details?
+What is the base URL for the Flowershop API?
 
-No, the provided API specification does not include endpoints or operations for updating an existing flower's details. You can only retrieve, add, or delete flowers.
+The base URL for the Flowershop API is https://api.example.com/v1, as specified in the 'servers' section of the OpenAPI specification.
 
-What is the purpose of the `servers` section in the OpenAPI specification?
+What is the 'operationId' field used for in the OpenAPI specification?
 
-The `servers` section defines the base URL for the API. In this case, the base URL is `https://api.example.com/v1`, which means all endpoint paths are relative to this base URL.
+The 'operationId' field is a unique string that identifies an operation in the API. It is used internally by code generation tools and documentation tools.
 
-How can I test the Flowershop API before integrating it into my application?
+What is the purpose of the 'components' section in the OpenAPI specification?
 
-You can use tools like Postman, Insomnia, or curl to send sample requests to the API endpoints and inspect the responses. This will help you understand the API's behavior and expected data formats.
+The 'components' section in the OpenAPI specification defines reusable data models, such as the 'Flower', 'NewFlower', and 'Error' models used by the API.
 
-What is the purpose of the `termsOfService`, `contact`, and `license` fields in the OpenAPI specification?
+How are data models defined in the OpenAPI specification?
 
-These fields provide additional metadata about the API, such as the terms of service URL, contact information for the API support team, and the license under which the API is provided.
+Data models in the OpenAPI specification are defined using JSON Schema. For example, the 'Flower' model inherits properties from the 'NewFlower' model and adds an 'id' property.
 
-Can I use this API to manage orders or inventory for the flower shop?
+What is the difference between a path parameter and a query parameter?
 
-No, the provided API specification does not include endpoints or operations for managing orders or inventory. It is focused solely on managing the available flowers in the shop.
+A path parameter is a variable value that is part of the endpoint URL, such as the {id} in /flowers/{id}. A query parameter is an optional parameter passed in the query string of the URL, such as ?type=rose&limit=10.
 
-How can I provide feedback or report issues with the Flowershop API?
+What is the purpose of the 'required' field in a data model definition?
 
-According to the `contact` information in the API specification, you can reach out to the API support team via email at `support@example.com` or by visiting the support URL at `https://example.com/support`.
+The 'required' field in a data model definition specifies which properties are mandatory for that model. For example, the 'NewFlower' model requires the 'name', 'type', and 'price' properties.
 
-What is the purpose of the `operationId` field in the endpoint definitions?
+What is the purpose of the 'termsOfService', 'contact', and 'license' fields in the OpenAPI specification?
 
-The `operationId` field is a unique string that identifies the operation being defined. It is used internally by API tooling and documentation generators and does not have a functional impact on the API itself.
+The 'termsOfService', 'contact', and 'license' fields provide metadata about the API, such as its terms of service, contact information for support, and licensing information.
+
+Can I use the Flowershop API for commercial purposes?
+
+The OpenAPI specification states that the Flowershop API is licensed under the Apache 2.0 license. You would need to review the terms of this license to determine if it allows commercial use.
+
+Where can I find more information about the OpenAPI specification?
+
+The OpenAPI specification is an open-source standard maintained by the OpenAPI Initiative. You can find more information, documentation, and tools on their official website: https://www.openapis.org/
 
