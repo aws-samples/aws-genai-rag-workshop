@@ -9,5 +9,5 @@ retrying==1.3.4
 plantweb
 PyPDF2==3.0.1
 langchain==0.1.5
-sagemaker
 sentence-transformers
+tqdm==4.66.4
