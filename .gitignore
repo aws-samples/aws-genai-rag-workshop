@@ -2,3 +2,5 @@
 __pycache__/
 .DS_Store
 .venv/*
+*.mp4
+*.tar.gz
