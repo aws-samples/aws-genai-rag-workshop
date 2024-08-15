@@ -4,3 +4,5 @@ __pycache__/
 .venv/*
 *.mp4
 *.tar.gz
+.env
+sherlock_holmes.txt
