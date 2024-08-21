@@ -17,3 +17,9 @@ tqdm==4.66.4
 ragas==0.1.14
 pydantic==1.10.8
 langchain-core==0.2.10
+llama-index
+llama-index-llms-bedrock
+llama-index-embeddings-bedrock
+sqlalchemy==2.0.21
+llama-index-embeddings-instructor
+llama-index-postprocessor-rankgpt-rerank
