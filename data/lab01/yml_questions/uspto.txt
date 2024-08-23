@@ -1,0 +1,110 @@
+
+    Documentation for uspto
+    
+    Description:
+    The USPTO Data Set API (DSAPI) is a collection of APIs that allows public users to discover and search USPTO exported data sets. It consists of two main APIs: the metadata API and the search API.
+
+The metadata API provides information about the available data sets and their searchable fields. It has two endpoints:
+
+1. GET /: This endpoint returns a list of available data sets, including the dataset name (apiKey), version (apiVersionNumber), the URL to retrieve the list of searchable fields (apiUrl), and a URL to access the API documentation (apiDocumentationUrl).
+
+2. GET /{dataset}/{version}/fields: This endpoint provides general information about a specific dataset and version, including a list of fields that can be used to query the dataset.
+
+The search API allows users to search and retrieve data from a particular dataset based on specified search criteria. It has one endpoint:
+
+POST /{dataset}/{version}/records: This endpoint accepts a search query in the request body, formatted using the Lucene Query Syntax. The request body includes the search criteria (criteria), the starting record number (start), and the number of rows to return (rows). The response contains an array of record objects matching the search criteria, with each record object consisting of all the fields and their corresponding values.
+
+There are a few notable points about the APIs:
+
+- The GET requests have size limitations, so complex search criteria should be sent using the POST request.
+- The search API is based on Solr/Lucene Search, and the data is indexed using SOLR.
+- Refer to the Lucene Query Syntax documentation for formatting search queries.
+
+Potential errors and limits:
+
+- A 404 error will be returned if the specified dataset and version combination is not found or not published for public access.
+- The number of returned rows is limited by the 'rows' parameter in the search request. If not specified, the default is 100 rows.
+    ['- Number of routes/endpoints: 3', '- Number of request data models: 1', '- Number of response data models: 2', '- 2 APIs: metadata and search', '- 1 GET endpoint for listing available data sets', '- 1 GET endpoint for retrieving searchable fields for a dataset', '- 1 POST endpoint for searching and retrieving data']
+    
+    FAQ:
+    
+    What is the USPTO Data Set API (DSAPI)?
+
+The USPTO Data Set API (DSAPI) is a set of APIs that allows public users to discover and search USPTO exported data sets.
+
+What are the main APIs included in the DSAPI?
+
+The DSAPI consists of two main APIs: the metadata API and the search API.
+
+What does the metadata API do?
+
+The metadata API provides information about the available data sets and their searchable fields.
+
+What endpoints are included in the metadata API?
+
+The metadata API has two endpoints: GET / (to list available data sets) and GET /{dataset}/{version}/fields (to retrieve searchable fields for a dataset).
+
+What does the search API do?
+
+The search API allows users to search and retrieve data from a particular dataset based on specified search criteria.
+
+What endpoint is included in the search API?
+
+The search API has one endpoint: POST /{dataset}/{version}/records (to perform a search and retrieve data).
+
+How are search queries formatted for the search API?
+
+Search queries are formatted using the Lucene Query Syntax and sent in the request body of the POST /{dataset}/{version}/records endpoint.
+
+What are the required parameters for the search API endpoint?
+
+The required parameters for the POST /{dataset}/{version}/records endpoint are 'criteria' (the search query), 'start' (starting record number), and 'rows' (number of rows to return).
+
+What is the default value for the 'start' parameter in the search API?
+
+The default value for the 'start' parameter is 0.
+
+What is the default value for the 'rows' parameter in the search API?
+
+The default value for the 'rows' parameter is 100.
+
+What does the response from the search API contain?
+
+The response from the search API contains an array of record objects matching the search criteria, with each record object consisting of all the fields and their corresponding values.
+
+What error code will be returned if the specified dataset and version combination is not found or not published for public access?
+
+A 404 error code will be returned if the specified dataset and version combination is not found or not published for public access.
+
+Why is the POST method used for the search API instead of GET?
+
+The POST method is used for the search API to allow users to specify complex search criteria without worrying about the size limitations of GET requests and encoding of input parameters.
+
+What is the underlying technology used for the search functionality in the search API?
+
+The search API is based on Solr/Lucene Search, and the data is indexed using SOLR.
+
+Where can I find documentation on the Lucene Query Syntax used for search queries?
+
+The Lucene Query Syntax documentation can be found at https://lucene.apache.org/core/3_6_2/queryparsersyntax.html#Overview
+
+How can I retrieve the list of available data sets?
+
+You can retrieve the list of available data sets by sending a GET request to the / endpoint.
+
+How can I retrieve the list of searchable fields for a specific dataset?
+
+You can retrieve the list of searchable fields for a specific dataset by sending a GET request to the /{dataset}/{version}/fields endpoint, replacing {dataset} and {version} with the appropriate values.
+
+What is the purpose of the 'apiDocumentationUrl' field in the response from the GET / endpoint?
+
+The 'apiDocumentationUrl' field in the response from the GET / endpoint provides a URL to access the API console and documentation for each available data set API.
+
+Can I use the search API to retrieve data from multiple data sets in a single request?
+
+No, the search API allows you to search and retrieve data from one data set at a time. You would need to make separate requests for each data set you want to search.
+
+What should I do if I encounter an error or have a question about using the APIs?
+
+If you encounter an error or have a question about using the APIs, you can contact the Open Data Portal team at the email address provided in the API documentation (developer@uspto.gov).
+
