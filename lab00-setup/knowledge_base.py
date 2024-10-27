@@ -255,8 +255,8 @@ class BedrockKnowledgeBase:
 
         # Create a DataSource in KnowledgeBase
         try:
-            print(self.kb_name)
-            print(kb['knowledgeBaseId'])
+            print(f"KnowledgeBase Name: {self.kb_name}")
+            print(f"KnowledgeBase Id: {kb['knowledgeBaseId']}")
             print(s3_configuration)
             create_ds_response = self.bedrock_agent_client.create_data_source(
                 name=self.kb_name,
@@ -270,7 +270,6 @@ class BedrockKnowledgeBase:
                 dataDeletionPolicy='RETAIN'
             )
             ds = create_ds_response["dataSource"]
-            pp.pprint(ds)
         except self.bedrock_agent_client.exceptions.ConflictException:
             ds_id = self.bedrock_agent_client.list_data_sources(
                 knowledgeBaseId=kb['knowledgeBaseId'],
@@ -294,7 +293,7 @@ class BedrockKnowledgeBase:
             dataSourceId=self.data_source["dataSourceId"]
         )
         job = start_job_response["ingestionJob"]
-        pp.pprint(job)
+        print("Start ingestion.....")
         # Get job
         while job['status'] != 'COMPLETE':
             get_job_response = self.bedrock_agent_client.get_ingestion_job(
@@ -310,7 +309,6 @@ class BedrockKnowledgeBase:
         """
         Get Knowledge Base Id
         """
-        pp.pprint(self.knowledge_base["knowledgeBaseId"])
         return self.knowledge_base["knowledgeBaseId"]
 
     def get_bucket_name(self):
