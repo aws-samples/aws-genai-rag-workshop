@@ -273,7 +273,7 @@ def generate_diagram(plantuml_code, output_format='png'):
 
 def upload_to_s3(diagram_data, key):
     """
-    Upload generated diagram to S3 using default SageMaker bucket
+    Upload generated diagram to S3 using default SageMaker bucket and return S3 URI
     """
     try:
         bucket_name = get_default_bucket()
@@ -285,14 +285,10 @@ def upload_to_s3(diagram_data, key):
             ContentType='image/png'
         )
         
-        # Generate presigned URL
-        url = s3_client.generate_presigned_url(
-            'get_object',
-            Params={'Bucket': bucket_name, 'Key': key},
-            ExpiresIn=3600  # URL expires in 1 hour
-        )
+        # Generate S3 URI instead of presigned URL
+        s3_uri = f"s3://{bucket_name}/{key}"
         
-        return url
+        return s3_uri
     except Exception as e:
         raise Exception(f"Error uploading to S3: {str(e)}")
 
@@ -331,19 +327,19 @@ def get_uml_diagram(yml_code, output_format='png'):
         
         # Upload to S3 with a unique filename
         file_name = f"diagrams/{uuid.uuid4()}.{output_format}"
-        diagram_url = upload_to_s3(diagram_data, file_name)
+        diagram_s3_uri = upload_to_s3(diagram_data, file_name)
         
         return {
-            "codeBody": plantuml_text,
-            "diagramUrl": diagram_url
+            "codeBody": plantuml_code,
+            "diagramUri": diagram_s3_uri  # Changed from diagramUrl to diagramUri
         }
         
     except Exception as e:
-        print(f"Error in get_uml_diagram: {str(e)}")
+        logger.error(f"Error in get_uml_diagram: {str(e)}")
         return {
             "error": str(e),
             "codeBody": None,
-            "diagramUrl": None
+            "diagramUri": None  # Changed from diagramUrl to diagramUri
         }
 
 def get_unit_test_code(yml_code, query):
