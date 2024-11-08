@@ -270,61 +270,27 @@ def create_lambda_role(agent_name):
         ]
     }
     
-    # S3 policy for writing PlantUML diagrams to SageMaker default bucket
-    sagemaker_s3_policy_document = {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "s3:PutObject",
-                    "s3:GetObject",
-                    "s3:ListBucket"
-                ],
-                "Resource": [
-                    # SageMaker default bucket pattern: sagemaker-{region}-{account_id}
-                    f"arn:aws:s3:::sagemaker-{region_name}-{account_number}",
-                    f"arn:aws:s3:::sagemaker-{region_name}-{account_number}/*"
-                ]
-            }
-        ]
-    }
-    
-    # Create policies based on the policy documents
+    # create policies based on the policy documents
     fm_policy = iam_client.create_policy(
         PolicyName=lambda_fm_policy_name,
         PolicyDocument=json.dumps(foundation_model_policy_document),
         Description='Policy for accessing foundation model',
     )
 
-    # Create S3 policy for PlantUML diagram storage
-    sagemaker_s3_policy_name = f'AWSLambdaSageMakerS3Policy_{suffix}'
-    s3_policy = iam_client.create_policy(
-        PolicyName=sagemaker_s3_policy_name,
-        PolicyDocument=json.dumps(sagemaker_s3_policy_document),
-        Description='Policy for writing PlantUML diagrams to SageMaker default S3 bucket',
-    )
-
-    # Attach the policies to the Lambda function's role
+    # Attach the policy to the Lambda function's role
     iam_client.attach_role_policy(
         RoleName=lambda_function_role_name,
         PolicyArn=fm_policy['Policy']['Arn']
     )
-    
-    iam_client.attach_role_policy(
-        RoleName=lambda_function_role_name,
-        PolicyArn=s3_policy['Policy']['Arn']
-    )
-
     return lambda_iam_role
 
-def create_lambda(lambda_file, lambda_function_name, lambda_iam_role):
+def create_lambda(lambda_function_name, lambda_iam_role):
     # add to function
 
     # Package up the lambda function code
     s = BytesIO()
     z = zipfile.ZipFile(s, 'w')
-    z.write(lambda_file)
+    z.write("lambda_function.py")
     z.close()
     zip_content = s.getvalue()
 
@@ -346,7 +312,6 @@ def delete_iam_role_and_policies():
     oss_policy_arn = f"arn:aws:iam::{account_number}:policy/{oss_policy_name}"
     kb_policy_arn = f"arn:aws:iam::{account_number}:policy/{kb_policy_name}"
     lambda_fn_policy_arn = f"arn:aws:iam::{account_number}:policy/{lambda_fm_policy_name}"
-    sagemaker_s3_policy_arn = f"arn:aws:iam::{account_number}:policy/AWSLambdaSageMakerS3Policy_{suffix}"
 
     iam_client.detach_role_policy(
         RoleName=bedrock_execution_role_name,
@@ -371,11 +336,6 @@ def delete_iam_role_and_policies():
         PolicyArn=lambda_fn_policy_arn
     )
 
-    iam_client.detach_role_policy(
-        RoleName=lambda_function_role_name,
-        PolicyArn=sagemaker_s3_policy_arn
-    )
-
     iam_client.delete_role(RoleName=bedrock_execution_role_name)
     iam_client.delete_role(RoleName=lambda_function_role_name)
     iam_client.delete_policy(PolicyArn=s3_policy_arn)
@@ -383,7 +343,6 @@ def delete_iam_role_and_policies():
     iam_client.delete_policy(PolicyArn=fm_policy_arn)
     iam_client.delete_policy(PolicyArn=oss_policy_arn)
     iam_client.delete_policy(PolicyArn=lambda_fn_policy_arn)
-    iam_client.delete_policy(PolicyArn=sagemaker_s3_policy_arn)
     return 0
 
 
