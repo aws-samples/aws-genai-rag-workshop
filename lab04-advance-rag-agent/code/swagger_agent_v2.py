@@ -1,6 +1,7 @@
 import boto3
 import json
 import requests
+import os
 from datetime import datetime
 from bedrock_agentcore.runtime import BedrockAgentCoreApp
 from strands import Agent, tool
@@ -11,7 +12,7 @@ from bedrock_agentcore_starter_toolkit.operations.gateway.client import GatewayC
 
 # Configuration
 REGION_NAME = boto3.Session().region_name
-BEDROCK_KB_ID = "MRQAJK5CPC"
+BEDROCK_KB_ID = os.environ.get('BEDROCK_KB_ID', 'MRQAJK5CPC')
 
 # Initialize clients
 bedrock_agent_client = boto3.client('bedrock-agent-runtime', region_name=REGION_NAME)
